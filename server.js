@@ -18,13 +18,14 @@ app.get('/', (req, res) => {
   });
 });
 
-// ডেটা ফেচ এবং সেভ করার ফাংশন (corsproxy.io সহ আপডেট করা)
+// ডেটা ফেচ এবং সেভ করার ফাংশন (codetabs প্রক্সি সহ)
 async function fetchAndSaveData() {
   try {
-    const proxyUrl = `https://corsproxy.io/?${encodeURIComponent(SOURCE_API_URL)}`;
+    const proxyUrl = `https://api.codetabs.com/v1/proxy?quest=${encodeURIComponent(SOURCE_API_URL)}`;
+    
     const response = await axios.get(proxyUrl, {
       headers: {
-        'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36'
+        'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36'
       }
     });
 
