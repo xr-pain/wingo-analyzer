@@ -18,12 +18,17 @@ app.get('/', (req, res) => {
   });
 });
 
-// ডেটা ফেচ এবং সেভ করার ফাংশন
+// ডেটা ফেচ এবং সেভ করার ফাংশন (corsproxy.io সহ আপডেট করা)
 async function fetchAndSaveData() {
   try {
-    const proxyUrl = `https://api.allorigins.win/get?url=${encodeURIComponent(SOURCE_API_URL)}`;
-    const response = await axios.get(proxyUrl);
-    const data = JSON.parse(response.data.contents);
+    const proxyUrl = `https://corsproxy.io/?${encodeURIComponent(SOURCE_API_URL)}`;
+    const response = await axios.get(proxyUrl, {
+      headers: {
+        'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36'
+      }
+    });
+
+    const data = typeof response.data === 'string' ? JSON.parse(response.data) : response.data;
 
     const records = data.data?.list || data.list || data;
 
@@ -37,6 +42,8 @@ async function fetchAndSaveData() {
 
       await batch.commit();
       console.log(`Successfully saved ${records.length} items to Firestore.`);
+    } else {
+      console.log("No records found in API response:", data);
     }
   } catch (error) {
     console.error("Error fetching or saving data:", error.message);
